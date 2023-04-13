@@ -1,25 +1,55 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useReducer } from 'react';
+import { Box, Container } from '@mui/material';
+import { reducer } from './State/reducer';
+import { State } from './State/State';
+import { GenerateInternalKey } from './Components/GenerateInternalKey';
+import { PayToApp } from './Components/PayToApp';
+import { makeNavigation } from './Components/Navigation';
+import { AddBackupKeys } from './Components/AddBackupKeys';
+import { ShowDescriptors } from './Components/ShowDescriptors';
+import { Complete } from './Components/Complete';
+
+const INITIAL_STATE: State = {
+  stage: 'generate_internal_key'
+};
 
 function App() {
+  const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
+  const stage = state.stage;
+  const Navigation = makeNavigation(dispatch);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Box sx={{ width: '100vw', minHeight: '100vh' }}>
+      <Container maxWidth="md" sx={{ py: 10 }}>
+        {
+          stage === 'generate_internal_key' &&
+          <GenerateInternalKey navigation={Navigation({ next: 'pay_to_app' })} />
+        }
+        {
+          stage === 'pay_to_app' &&
+          <PayToApp
+            navigation={Navigation({ prev: 'generate_internal_key', next: 'add_backup_keys' })}
+          />
+        }
+        {
+          stage === 'add_backup_keys' &&
+          <AddBackupKeys
+            navigation={Navigation({ prev: 'pay_to_app', next: 'show_descriptors' })}
+          />
+        }
+        {
+          stage === 'show_descriptors' &&
+          <ShowDescriptors
+            navigation={Navigation({ prev: 'add_backup_keys', next: 'complete' })}
+          />
+        }
+        {
+          stage === 'complete' &&
+          <Complete
+            navigation={Navigation({ prev: 'show_descriptors' })}
+          />
+        }
+      </Container>
+    </Box>
   );
 }
 
