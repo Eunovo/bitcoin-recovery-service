@@ -22,29 +22,40 @@ function App() {
       <Container maxWidth="md" sx={{ py: 10 }}>
         {
           stage === 'generate_internal_key' &&
-          <GenerateInternalKey navigation={Navigation({ next: 'pay_to_app' })} />
+          <GenerateInternalKey
+            state={state}
+            dispatch={dispatch}
+            navigation={Navigation({ next: 'pay_to_app' })} />
         }
         {
           stage === 'pay_to_app' &&
           <PayToApp
+            state={state}
+            dispatch={dispatch}
             navigation={Navigation({ prev: 'generate_internal_key', next: 'add_backup_keys' })}
           />
         }
         {
           stage === 'add_backup_keys' &&
           <AddBackupKeys
+            state={state}
+            dispatch={dispatch}
             navigation={Navigation({ prev: 'pay_to_app', next: 'show_descriptors' })}
           />
         }
         {
           stage === 'show_descriptors' &&
           <ShowDescriptors
+            state={state}
+            dispatch={dispatch}
             navigation={Navigation({ prev: 'add_backup_keys', next: 'complete' })}
           />
         }
         {
           stage === 'complete' &&
           <Complete
+            state={state}
+            dispatch={dispatch}
             navigation={Navigation({ prev: 'show_descriptors' })}
           />
         }
