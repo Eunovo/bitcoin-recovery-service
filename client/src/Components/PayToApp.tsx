@@ -14,7 +14,6 @@ export const PayToApp: React.FC<StageProps> = ({ state, dispatch, navigation }) 
 
         const internalKey = await generateInternalKey(state.mnemonic);
         const address = generateTaprootAddress(internalKey);
-        console.log('address', address);
         if (address) dispatch({ kind: ActionKind.set_address, payload: address });
         return address;
     }, [state.mnemonic]);
