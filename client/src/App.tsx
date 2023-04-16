@@ -10,7 +10,8 @@ import { ShowDescriptors } from './Components/ShowDescriptors';
 import { Complete } from './Components/Complete';
 
 const INITIAL_STATE: State = {
-  stage: 'generate_mnemonic'
+  stage: 'generate_mnemonic',
+  mnemonic: 'unable famous street merit easily shallow energy target wild hello type electric'
 };
 
 function App() {
