@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { Box, IconButton, Typography } from "@mui/material";
 import { ContentCopy } from "@mui/icons-material";
 import { StageProps } from "./StageProps";
-import { generateInternalKey } from "../bitcoin/keys";
+import { generateXOnlyPubKey } from "../bitcoin/keys";
 import { usePromise, copyTextToClipboard } from "../utils";
 import { generateTaprootAddress } from "../bitcoin/address";
 import { ActionKind } from "../State/Actions";
@@ -12,7 +12,7 @@ export const PayToApp: React.FC<StageProps> = ({ state, dispatch, navigation }) 
         if (!state.mnemonic)
             throw new Error('Cannot generate address without mnemonic');
 
-        const internalKey = await generateInternalKey(state.mnemonic);
+        const internalKey = await generateXOnlyPubKey(state.mnemonic);
         const address = generateTaprootAddress(internalKey);
         if (address) dispatch({ kind: ActionKind.set_address, payload: address });
         return address;

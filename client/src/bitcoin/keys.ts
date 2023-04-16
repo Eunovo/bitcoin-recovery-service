@@ -8,7 +8,7 @@ export function generateMnemonic() {
     return bip39.generateMnemonic();
 }
 
-export async function generateInternalKey(mnemonic: string) {
+export async function generateXOnlyPubKey(mnemonic: string) {
     const seed = await bip39.mnemonicToSeed(mnemonic);
     const rootKey = bip32.fromSeed(seed);
     return rootKey.publicKey.slice(1, 33);
