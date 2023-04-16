@@ -17,7 +17,9 @@ export const TextBoxWithCopy: FC<TextBoxWithCopyProps> = ({ content }) => {
             display: 'flex',
             alignItems: 'center'
         }}>
-            {content}
+            <Typography noWrap>
+                {content}
+            </Typography>
 
             <IconButton
                 color='primary'
