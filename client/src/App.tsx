@@ -2,7 +2,7 @@ import React, { useReducer } from 'react';
 import { Box, Container } from '@mui/material';
 import { reducer } from './State/reducer';
 import { State } from './State/State';
-import { GenerateInternalKey } from './Components/GenerateInternalKey';
+import { GenerateMnemonic } from './Components/GenerateMnemonic';
 import { PayToApp } from './Components/PayToApp';
 import { makeNavigation } from './Components/Navigation';
 import { AddBackupKeys } from './Components/AddBackupKeys';
@@ -10,7 +10,7 @@ import { ShowDescriptors } from './Components/ShowDescriptors';
 import { Complete } from './Components/Complete';
 
 const INITIAL_STATE: State = {
-  stage: 'generate_internal_key'
+  stage: 'generate_mnemonic'
 };
 
 function App() {
@@ -21,8 +21,8 @@ function App() {
     <Box sx={{ width: '100vw', minHeight: '100vh' }}>
       <Container maxWidth="md" sx={{ py: 10 }}>
         {
-          stage === 'generate_internal_key' &&
-          <GenerateInternalKey
+          stage === 'generate_mnemonic' &&
+          <GenerateMnemonic
             state={state}
             dispatch={dispatch}
             navigation={Navigation({ next: 'pay_to_app' })} />
@@ -32,7 +32,7 @@ function App() {
           <PayToApp
             state={state}
             dispatch={dispatch}
-            navigation={Navigation({ prev: 'generate_internal_key', next: 'add_backup_keys' })}
+            navigation={Navigation({ prev: 'generate_mnemonic', next: 'add_backup_keys' })}
           />
         }
         {

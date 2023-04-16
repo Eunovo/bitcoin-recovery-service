@@ -4,7 +4,7 @@ import { ActionKind } from "../State/Actions";
 import { StageProps } from "./StageProps";
 import { generateMnemonic } from "../bitcoin/keys";
 
-export const GenerateInternalKey: FC<StageProps> = ({ state, dispatch, navigation }) => {
+export const GenerateMnemonic: FC<StageProps> = ({ state, dispatch, navigation }) => {
     const mnemonic = useMemo(() => {
         if (state.mnemonic) return state.mnemonic;
         const mnemonic = generateMnemonic();
