@@ -11,7 +11,8 @@ import { Complete } from './Components/Complete';
 
 const INITIAL_STATE: State = {
   stage: 'generate_mnemonic',
-  mnemonic: 'unable famous street merit easily shallow energy target wild hello type electric'
+  mnemonic: 'unable famous street merit easily shallow energy target wild hello type electric',
+  backupKeys: []
 };
 
 function App() {
