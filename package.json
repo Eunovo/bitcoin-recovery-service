@@ -4,5 +4,6 @@
   "main": "index.js",
   "repository": "git@github.com:Eunovo/bitcoin-recovery-service.git",
   "author": "Novo <eunovo9@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {}
 }

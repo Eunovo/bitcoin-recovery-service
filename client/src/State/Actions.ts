@@ -2,7 +2,7 @@ import { State } from "./State"
 
 export enum ActionKind {
     set_stage = 'set_stage',
-    set_internal_key = 'set_internal_key',
+    set_mnemonic = 'set_mnemonic'
 }
 
 export type Action = 
@@ -11,6 +11,6 @@ export type Action =
     payload: State['stage']
 }
 | {
-    kind: ActionKind.set_internal_key,
+    kind: ActionKind.set_mnemonic,
     payload: string
 }
