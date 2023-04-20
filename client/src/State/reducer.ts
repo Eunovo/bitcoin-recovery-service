@@ -10,7 +10,11 @@ export function reducer(state: State, action: Action) {
             return { ...state, mnemonic: action.payload };
 
         case ActionKind.set_address:
-            return { ...state, address: action.payload };
+            return {
+                ...state,
+                address: action.payload.address,
+                signer: action.payload.signer
+            };
 
         case ActionKind.add_backup_key:
             return { ...state, backupKeys: [...state.backupKeys, action.payload] };

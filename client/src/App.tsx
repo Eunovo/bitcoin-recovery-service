@@ -1,5 +1,6 @@
 import React, { useReducer } from 'react';
 import { Box, Container } from '@mui/material';
+import { networks } from 'bitcoinjs-lib';
 import { reducer } from './State/reducer';
 import { State } from './State/State';
 import { GenerateMnemonic } from './Components/GenerateMnemonic';
@@ -11,6 +12,7 @@ import { Complete } from './Components/Complete';
 
 const INITIAL_STATE: State = {
   stage: 'generate_mnemonic',
+  network: networks.testnet,
   mnemonic: 'unable famous street merit easily shallow energy target wild hello type electric',
   backupKeys: []
 };

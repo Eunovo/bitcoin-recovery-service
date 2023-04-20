@@ -1,3 +1,4 @@
+import { Signer } from "bitcoinjs-lib"
 import { State } from "./State"
 
 export enum ActionKind {
@@ -19,7 +20,10 @@ export type Action =
 }
 | {
     kind: ActionKind.set_address,
-    payload: string
+    payload: {
+        address: string;
+        signer: Signer;
+    }
 }
 | {
     kind: ActionKind.add_backup_key,
