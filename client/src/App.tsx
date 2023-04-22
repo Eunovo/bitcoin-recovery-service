@@ -9,11 +9,13 @@ import { makeNavigation } from './Components/Navigation';
 import { AddBackupKeys } from './Components/AddBackupKeys';
 import { ShowDescriptors } from './Components/ShowDescriptors';
 import { Complete } from './Components/Complete';
+import { FetchUtxos } from './Components/FetchUtxos';
 
 const INITIAL_STATE: State = {
   stage: 'generate_mnemonic',
   network: networks.testnet,
   mnemonic: 'unable famous street merit easily shallow energy target wild hello type electric',
+  utxos: [],
   backupKeys: []
 };
 
@@ -36,7 +38,15 @@ function App() {
           <PayToApp
             state={state}
             dispatch={dispatch}
-            navigation={Navigation({ prev: 'generate_mnemonic', next: 'add_backup_keys' })}
+            navigation={Navigation({ prev: 'generate_mnemonic', next: 'fetch_utxos' })}
+          />
+        }
+        {
+          stage === 'fetch_utxos' &&
+          <FetchUtxos
+            state={state}
+            dispatch={dispatch}
+            navigation={Navigation({ prev: 'pay_to_app', next: 'add_backup_keys' })}
           />
         }
         {

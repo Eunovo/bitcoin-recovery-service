@@ -5,6 +5,7 @@ export enum ActionKind {
     set_stage = 'set_stage',
     set_mnemonic = 'set_mnemonic',
     set_address = 'set_address',
+    set_utxos = 'set_utxos',
     add_backup_key = 'add_backup_key',
     remove_backup_key = 'remove_backup_key'
 }
@@ -24,6 +25,10 @@ export type Action =
         address: string;
         signer: Signer;
     }
+}
+| {
+    kind: ActionKind.set_utxos,
+    payload: State['utxos']
 }
 | {
     kind: ActionKind.add_backup_key,

@@ -16,6 +16,9 @@ export function reducer(state: State, action: Action) {
                 signer: action.payload.signer
             };
 
+        case ActionKind.set_utxos:
+            return { ...state, utxos: action.payload };
+
         case ActionKind.add_backup_key:
             return { ...state, backupKeys: [...state.backupKeys, action.payload] };
 
