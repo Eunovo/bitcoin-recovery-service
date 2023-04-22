@@ -1,5 +1,10 @@
+import * as tinysecp from "tiny-secp256k1";
+import * as descriptors from "@bitcoinerlab/descriptors";
+import { Network } from "bitcoinjs-lib";
 import { State } from "../State/State";
 import { generateXOnlyPubKey } from "./keys";
+
+const { Descriptor } = descriptors.DescriptorsFactory(tinysecp);
 
 export const DESCRIPTORS = {
     pay_to_pubkey: (pubkey: string) => `pk(${pubkey})`,
@@ -18,4 +23,15 @@ export async function createTaprootDescriptorsForBackupkeys(masterMnemonic: stri
     );
     const internalKey = await generateXOnlyPubKey(masterMnemonic);
     return [DESCRIPTORS.taproot(internalKey.toString('hex'), scriptTree)];
+}
+
+export function getAddressesFromDescriptor(descriptors: string[], network: Network) {
+    return descriptors.map((value) => {
+        const descriptor = new Descriptor({
+            expression: value,
+            network
+        });
+
+        return descriptor.getAddress();
+    })
 }
