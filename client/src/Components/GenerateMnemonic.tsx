@@ -10,7 +10,7 @@ export const GenerateMnemonic: FC<StageProps> = ({ state, dispatch, navigation }
         const mnemonic = generateMnemonic();
         dispatch({ kind: ActionKind.set_mnemonic, payload: mnemonic });
         return mnemonic;
-    }, [state]);
+    }, [state, dispatch]);
 
     return <Box>
         <Typography variant='h3'>Write down these words</Typography>

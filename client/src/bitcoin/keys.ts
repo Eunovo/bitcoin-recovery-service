@@ -1,5 +1,5 @@
 import BIP32Factory from 'bip32';
-import { crypto, initEccLib, networks, payments, Signer } from "bitcoinjs-lib";
+import { crypto, initEccLib, Signer } from "bitcoinjs-lib";
 import * as ecc from 'tiny-secp256k1';
 import * as bip39 from "bip39";
 import { ECPairFactory, ECPairAPI } from 'ecpair';

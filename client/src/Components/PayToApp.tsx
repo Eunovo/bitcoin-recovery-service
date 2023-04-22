@@ -18,7 +18,7 @@ export const PayToApp: React.FC<StageProps> = ({ state, dispatch, navigation }) 
         const address = generateTaprootAddress(signer, state.network);
         if (address) dispatch({ kind: ActionKind.set_address, payload: { address, signer } });
         return address;
-    }, [state.mnemonic]);
+    }, [state.mnemonic, state.network, dispatch]);
     const address = usePromise(generateAddress);
 
     return <Box>
