@@ -16,7 +16,11 @@ const INITIAL_STATE: State = {
   network: networks.testnet,
   mnemonic: 'unable famous street merit easily shallow energy target wild hello type electric',
   utxos: [],
-  backupKeys: []
+  backupKeys: [
+    {
+      mnemonic: 'apple scorpion artwork onion current exile mention remember bean wave half act'
+    }
+  ]
 };
 
 function App() {
