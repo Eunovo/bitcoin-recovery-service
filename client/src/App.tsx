@@ -13,7 +13,7 @@ import { FetchUtxos } from './Components/FetchUtxos';
 
 const INITIAL_STATE: State = {
   stage: 'generate_mnemonic',
-  network: networks.testnet,
+  network: networks.regtest,
   mnemonic: 'unable famous street merit easily shallow energy target wild hello type electric',
   utxos: [],
   backupKeys: [
