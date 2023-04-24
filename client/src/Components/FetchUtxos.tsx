@@ -1,13 +1,15 @@
-import { FC, useRef, useEffect } from 'react';
+import { FC, useRef, useEffect, useState } from 'react';
 import { Box, CircularProgress, Typography } from '@mui/material';
 import { StageProps } from './StageProps';
 import { fetchUtxosForAddress } from '../bitcoin/network-api';
 import { ActionKind } from '../State/Actions';
 
 const BTC_TO_SATS = 1e8;
+type Maybe<T> = { state: 'set', value: any } | { state: 'not_set' };
 
 export const FetchUtxos: FC<StageProps> = ({ state, dispatch, navigation }) => {
-    const intervalId = useRef<{ state: 'set', value: any } | { state: 'not_set' }>({ state: 'not_set' });
+    const intervalId = useRef<Maybe<any>>({ state: 'not_set' });
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const unsetInterval = () => {
@@ -20,6 +22,7 @@ export const FetchUtxos: FC<StageProps> = ({ state, dispatch, navigation }) => {
         const checkForUtxo = () => {
             if (!state.address) {
                 unsetInterval();
+                setIsLoading(false);
                 return;
             }
             fetchUtxosForAddress(state.address, state.network)
@@ -30,23 +33,25 @@ export const FetchUtxos: FC<StageProps> = ({ state, dispatch, navigation }) => {
                             payload: data
                         });
                         unsetInterval();
+                        setIsLoading(false);
                     }
                 })
                 .catch((error) => {
                     console.log(error);
                     unsetInterval();
+                    setIsLoading(false);
                 });
         };
         unsetInterval();
         intervalId.current = {
             state: 'set',
-            value: setInterval(checkForUtxo, 10000)
+            value: setInterval(checkForUtxo, 1000)
         };
+        checkForUtxo();
 
         return () => { unsetInterval(); }
     }, [state.address, state.network, dispatch]);
 
-    const isLoading = intervalId.current.state === 'set';
     const totalInBtc = state.utxos.reduce((agg, utxo) => agg + utxo.amount, 0);
     const totalInSatoshis = totalInBtc * BTC_TO_SATS;
     const amountFormatter = new Intl.NumberFormat('en-Us', {
