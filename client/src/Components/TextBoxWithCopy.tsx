@@ -9,7 +9,7 @@ interface TextBoxWithCopyProps {
 
 export const TextBoxWithCopy: FC<TextBoxWithCopyProps> = ({ content }) => {
     return <>
-        <Typography sx={{
+        <Typography component='div' sx={{
             mt: 4,
             p: 2,
             borderRadius: 2,
