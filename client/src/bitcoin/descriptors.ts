@@ -10,19 +10,25 @@ export const DESCRIPTORS = {
     pay_to_pubkey: (pubkey: string) => `pk(${pubkey})`,
     script_tree: (scripts: string[]) => `{${scripts.join(',')}}`,
     taproot: (pubkey: string, script_tree?: string) => script_tree
-        ? `tr(${pubkey}, ${script_tree})`
+        ? `tr(${pubkey},${script_tree})`
         : `tr(${pubkey})`
 };
 
 export async function createTaprootDescriptorsForBackupkeys(masterMnemonic: string, backupKeys: State['backupKeys']) {
-    const scriptTree = DESCRIPTORS.script_tree(
-        await Promise.all(backupKeys.map(async (backupKey) => {
-            const xOnlyPk = await generateXOnlyPubKey(backupKey.mnemonic);
-            return DESCRIPTORS.pay_to_pubkey(xOnlyPk.toString('hex'));
-        }))
-    );
+    // Each tree node must have two leaves
+    if (backupKeys.length == 1) backupKeys.push(backupKeys[0]);
+    
+    const scriptTree = await Promise.all(backupKeys.map(async (backupKey) => {
+        const xOnlyPk = (await generateXOnlyPubKey(backupKey.mnemonic)).toString('hex');
+        return xOnlyPk;
+    }));
     const internalKey = await generateXOnlyPubKey(masterMnemonic);
-    return [DESCRIPTORS.taproot(internalKey.toString('hex'), scriptTree)];
+
+    const outputTree = DESCRIPTORS.script_tree(
+        scriptTree.map((xOnlyPk) => DESCRIPTORS.pay_to_pubkey(xOnlyPk))
+    );
+
+    return [DESCRIPTORS.taproot(internalKey.toString('hex'), outputTree)];
 }
 
 export function getAddressesFromDescriptor(descriptors: string[], network: Network) {
