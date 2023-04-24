@@ -5,7 +5,7 @@ import { fetchUtxosForAddress } from '../bitcoin/network-api';
 import { ActionKind } from '../State/Actions';
 
 const BTC_TO_SATS = 1e8;
-type Maybe<T> = { state: 'set', value: any } | { state: 'not_set' };
+type Maybe<T> = { state: 'set', value: T } | { state: 'not_set' };
 
 export const FetchUtxos: FC<StageProps> = ({ state, dispatch, navigation }) => {
     const intervalId = useRef<Maybe<any>>({ state: 'not_set' });
