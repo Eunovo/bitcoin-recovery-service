@@ -1,5 +1,5 @@
 import { Network, Signer } from "bitcoinjs-lib";
-import { BlockstreamUTXO } from "../bitcoin/blockstream";
+import { UTXO } from "../bitcoin/UTXO";
 
 export interface State {
     stage: 'generate_mnemonic' | 'pay_to_app' | 'fetch_utxos' | 'add_backup_keys' | 'show_descriptors' | 'complete';
@@ -7,7 +7,7 @@ export interface State {
     mnemonic?: string;
     signer?: Signer;
     address?: string;
-    utxos: BlockstreamUTXO[];
+    utxos: UTXO[];
     backupKeys: {
         mnemonic: string;
         validFrom?: Date;

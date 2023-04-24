@@ -1,8 +1,10 @@
 import { FC, useRef, useEffect } from 'react';
 import { Box, CircularProgress, Typography } from '@mui/material';
 import { StageProps } from './StageProps';
-import { fetchUtxosForAddress } from '../bitcoin/blockstream';
+import { fetchUtxosForAddress } from '../bitcoin/network-api';
 import { ActionKind } from '../State/Actions';
+
+const BTC_TO_SATS = 1e8;
 
 export const FetchUtxos: FC<StageProps> = ({ state, dispatch, navigation }) => {
     const intervalId = useRef<{ state: 'set', value: any } | { state: 'not_set' }>({ state: 'not_set' });
@@ -45,7 +47,8 @@ export const FetchUtxos: FC<StageProps> = ({ state, dispatch, navigation }) => {
     }, [state.address, state.network, dispatch]);
 
     const isLoading = intervalId.current.state === 'set';
-    const totalInSatoshis = state.utxos.reduce((agg, utxo) => agg + utxo.value, 0);
+    const totalInBtc = state.utxos.reduce((agg, utxo) => agg + utxo.amount, 0);
+    const totalInSatoshis = totalInBtc * BTC_TO_SATS;
     const amountFormatter = new Intl.NumberFormat('en-Us', {
         useGrouping: true
     })
@@ -89,15 +92,15 @@ export const FetchUtxos: FC<StageProps> = ({ state, dispatch, navigation }) => {
                                 variant='body2'
                                 sx={{
                                     p: 0.5,
-                                    backgroundColor: utxo.status.confirmed ? '#a4ffa4' : '#FEBA4F',
+                                    backgroundColor: utxo.confirmations > 100 ? '#a4ffa4' : '#FEBA4F',
                                     ml: 'auto',
                                     borderRadius: 1
                                 }}
                             >
-                                {utxo.status.confirmed ? 'confirmed' : 'unconfirmed'}
+                                {utxo.confirmations > 100 ? 'confirmed' : 'unconfirmed'}
                             </Typography>
                         </Box>
-                        <Typography variant='body1'>{amountFormatter.format(utxo.value)} Satoshis</Typography>
+                        <Typography variant='body1'>{amountFormatter.format(utxo.amount * BTC_TO_SATS)} Satoshis</Typography>
                     </Box>)
                 }
 
