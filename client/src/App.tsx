@@ -19,6 +19,9 @@ const INITIAL_STATE: State = {
   backupKeys: [
     {
       mnemonic: 'apple scorpion artwork onion current exile mention remember bean wave half act'
+    },
+    {
+      mnemonic: 'category venue art angry feel spread theory disease lady chair evoke zero'
     }
   ]
 };
