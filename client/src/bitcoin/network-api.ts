@@ -26,7 +26,14 @@ export async function deriveAddresses(descriptor: string) {
     return JSON.parse(response.data).addresses as string[];
 }
 
-export async function broadcast(rawTransaction: string) {
-    const response: AxiosResponse<{ txid: string }> = await axios.post(`/transaction`);
-    return response.data;
+export async function broadcast(rawTransaction: string): Promise<{ txid: string }> {
+    const response: AxiosResponse<string> = await axios
+        .post(
+            `/transaction`,
+            JSON.stringify({ rawTransaction }),
+            {
+                headers: { 'Content-type': 'application/json' }
+            }
+        );
+    return JSON.parse(response.data) as { txid: string };
 }
