@@ -19,9 +19,6 @@ export async function createTaprootDescriptorsForBackupkeys(
     backupKeys: State['backupKeys'],
     network: Network
 ) {
-    // Each tree node must have two leaves
-    if (backupKeys.length == 1) backupKeys.push(backupKeys[0]);
-
     const keys = await Promise.all(backupKeys.map(async (backupKey) => {
         const key = await generateKeyFrom(backupKey.mnemonic, network);
         const xOnlyPk = toXOnly(key.publicKey).toString('hex');
@@ -29,9 +26,20 @@ export async function createTaprootDescriptorsForBackupkeys(
     }));
     const internalKey = await generateXOnlyPubKey(masterMnemonic, network);
 
-    const outputTree = DESCRIPTORS.script_tree(
-        keys.map(({ xOnlyPk }) => DESCRIPTORS.pay_to_pubkey(xOnlyPk))
-    );
+    if (keys.length == 0) {
+        return [
+            {
+                name: 'watch-only',
+                value: DESCRIPTORS.taproot(internalKey.toString('hex'))
+            }
+        ]
+    }
+
+    const outputTree = keys.length > 1
+        ? DESCRIPTORS.script_tree(
+            keys.map(({ xOnlyPk }) => DESCRIPTORS.pay_to_pubkey(xOnlyPk))
+        )
+        : DESCRIPTORS.pay_to_pubkey(keys[0].xOnlyPk);
 
     return [
         {
