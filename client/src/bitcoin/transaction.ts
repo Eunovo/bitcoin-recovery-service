@@ -23,11 +23,13 @@ export function createTransaction(params: CreateTransactionParams) {
     const internalKey = toXOnly(params.signer.publicKey);
     const payment = generateTaprootPayment(params.signer, params.network);
 
-    psbt.addInput({
-        hash: params.utxos[0].txid,
-        index: params.utxos[0].vout,
-        witnessUtxo: { value: params.utxos[0].valueInSats, script: payment.output! },
-        tapInternalKey: internalKey
+    params.utxos.forEach((utxo) => {
+        psbt.addInput({
+            hash: utxo.txid,
+            index: utxo.vout,
+            witnessUtxo: { value: utxo.valueInSats, script: payment.output! },
+            tapInternalKey: internalKey
+        });
     });
 
     params.recipients.forEach(({ amountInSats, address }) => {
@@ -37,7 +39,7 @@ export function createTransaction(params: CreateTransactionParams) {
         });
     });
 
-    psbt.signInput(0, params.signer);
+    psbt.signAllInputs(params.signer);
     psbt.finalizeAllInputs();
 
     return psbt;
