@@ -24,7 +24,7 @@ export async function generateXOnlyPubKey(mnemonic: string, network: Network) {
 
 export async function generateSigner(mnemonic: string, network: Network) {
     const rootKey = await generateKeyFrom(mnemonic, network);
-    return ECPair.fromPrivateKey(rootKey.privateKey!);
+    return ECPair.fromPrivateKey(rootKey.privateKey!, { network });
 }
 
 export function tweakSigner(signer: Signer, opts: any = {}): Signer {
