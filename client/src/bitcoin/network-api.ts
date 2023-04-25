@@ -11,3 +11,8 @@ export async function fetchUtxosForAddress(address: string, _network: Network) {
     const data: UTXO[] = response.data ? JSON.parse(response.data) : undefined;
     return data;
 }
+
+export async function broadcast(rawTransaction: string) {
+    const response: AxiosResponse<{ txid: string }> = await axios.post(`/transaction`);
+    return response.data;
+}
