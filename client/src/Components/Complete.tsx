@@ -2,9 +2,9 @@ import { FC, useCallback } from "react";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { StageProps } from "./StageProps";
 import { createTransaction } from "../bitcoin/transaction";
-import { broadcast } from "../bitcoin/network-api";
+import { broadcast, deriveAddresses } from "../bitcoin/network-api";
 import { BTC_TO_SATS } from "../constants";
-import { createTaprootDescriptorsForBackupkeys, getAddressesFromDescriptor } from "../bitcoin/descriptors";
+import { createTaprootDescriptorsForBackupkeys } from "../bitcoin/descriptors";
 import { usePromise } from "../utils";
 import { TextBoxWithCopy } from "./TextBoxWithCopy";
 
@@ -22,7 +22,7 @@ export const Complete: FC<StageProps> = ({ state, navigation }) => {
             (desc) => desc.name == 'watch-only');
         if (!watchOnly) throw new Error("Could not find watch-only wallet descriptor");
         
-        const addresses = getAddressesFromDescriptor([watchOnly.value], state.network);
+        const addresses = await deriveAddresses(watchOnly.value);
         const utxos = state.utxos.map((utxo) => ({
             txid: utxo.txid,
             vout: utxo.vout,
