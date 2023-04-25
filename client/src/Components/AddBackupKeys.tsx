@@ -10,6 +10,7 @@ export const AddBackupKeys: FC<StageProps> = ({ state, dispatch, navigation }) =
         dispatch({
             kind: ActionKind.add_backup_key,
             payload: {
+                name: 'Carol',
                 mnemonic
             }
         })

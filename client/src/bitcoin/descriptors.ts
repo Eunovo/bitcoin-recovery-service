@@ -2,7 +2,7 @@ import * as tinysecp from "tiny-secp256k1";
 import * as descriptors from "@bitcoinerlab/descriptors";
 import { Network } from "bitcoinjs-lib";
 import { State } from "../State/State";
-import { generateXOnlyPubKey } from "./keys";
+import { generateKeyFrom, generateXOnlyPubKey, toXOnly } from "./keys";
 
 const { Descriptor } = descriptors.DescriptorsFactory(tinysecp);
 
@@ -21,18 +21,33 @@ export async function createTaprootDescriptorsForBackupkeys(
 ) {
     // Each tree node must have two leaves
     if (backupKeys.length == 1) backupKeys.push(backupKeys[0]);
-    
-    const scriptTree = await Promise.all(backupKeys.map(async (backupKey) => {
-        const xOnlyPk = (await generateXOnlyPubKey(backupKey.mnemonic, network)).toString('hex');
-        return xOnlyPk;
+
+    const keys = await Promise.all(backupKeys.map(async (backupKey) => {
+        const key = await generateKeyFrom(backupKey.mnemonic, network);
+        const xOnlyPk = toXOnly(key.publicKey).toString('hex');
+        return { name: backupKey.name, wifPrivKey: key.toWIF(), xOnlyPk };
     }));
     const internalKey = await generateXOnlyPubKey(masterMnemonic, network);
 
     const outputTree = DESCRIPTORS.script_tree(
-        scriptTree.map((xOnlyPk) => DESCRIPTORS.pay_to_pubkey(xOnlyPk))
+        keys.map(({ xOnlyPk }) => DESCRIPTORS.pay_to_pubkey(xOnlyPk))
     );
 
-    return [DESCRIPTORS.taproot(internalKey.toString('hex'), outputTree)];
+    return [
+        {
+            name: 'watch-only',
+            value: DESCRIPTORS.taproot(internalKey.toString('hex'), outputTree)
+        }
+    ].concat(
+        keys.map((key) => {
+            return {
+                name: key.name,
+                value: DESCRIPTORS.taproot(
+                    internalKey.toString('hex'),
+                    outputTree.replaceAll(key.xOnlyPk, key.wifPrivKey)
+                )
+            };
+        }));
 }
 
 export function getAddressesFromDescriptor(descriptors: string[], network: Network) {

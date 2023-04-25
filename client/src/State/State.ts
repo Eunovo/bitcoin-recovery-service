@@ -9,6 +9,7 @@ export interface State {
     address?: string;
     utxos: UTXO[];
     backupKeys: {
+        name: string;
         mnemonic: string;
         validFrom?: Date;
     }[];

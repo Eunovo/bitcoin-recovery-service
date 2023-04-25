@@ -18,9 +18,11 @@ const INITIAL_STATE: State = {
   utxos: [],
   backupKeys: [
     {
+      name: 'alice',
       mnemonic: 'apple scorpion artwork onion current exile mention remember bean wave half act'
     },
     {
+      name: 'bob',
       mnemonic: 'category venue art angry feel spread theory disease lady chair evoke zero'
     }
   ]

@@ -7,7 +7,7 @@ import { usePromise } from "../utils";
 
 export const ShowDescriptors: FC<StageProps> = ({ state, navigation }) => {
     const createWalletDescriptors = useCallback(() => {
-        if (!state.mnemonic) return Promise.resolve(['']);
+        if (!state.mnemonic) return Promise.resolve([]);
         return createTaprootDescriptorsForBackupkeys(
             state.mnemonic,
             state.backupKeys,
@@ -21,8 +21,10 @@ export const ShowDescriptors: FC<StageProps> = ({ state, navigation }) => {
         
         {
             walletDescriptors.value?.map((descriptor) => {
-                return <Box key={descriptor} sx={{ py: 2 }}>
-                    <TextBoxWithCopy content={descriptor} />
+                return <Box key={descriptor.name} sx={{ py: 2 }}>
+                    <Typography variant='h6' sx={{ textTransform: 'capitalize' }}>
+                        {descriptor.name}</Typography>
+                    <TextBoxWithCopy content={descriptor.value} />
                 </Box>
             })
         }
