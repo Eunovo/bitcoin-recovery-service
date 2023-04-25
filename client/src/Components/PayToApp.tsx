@@ -13,7 +13,7 @@ export const PayToApp: React.FC<StageProps> = ({ state, dispatch, navigation }) 
         if (!state.mnemonic)
             throw new Error('Cannot generate address without mnemonic');
 
-        let signer: Signer = await generateSigner(state.mnemonic);
+        let signer: Signer = await generateSigner(state.mnemonic, state.network);
         signer = tweakSigner(signer, { network: state.network });
         const address = generateTaprootAddress(signer, state.network);
         if (address) dispatch({ kind: ActionKind.set_address, payload: { address, signer } });

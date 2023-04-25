@@ -14,15 +14,19 @@ export const DESCRIPTORS = {
         : `tr(${pubkey})`
 };
 
-export async function createTaprootDescriptorsForBackupkeys(masterMnemonic: string, backupKeys: State['backupKeys']) {
+export async function createTaprootDescriptorsForBackupkeys(
+    masterMnemonic: string,
+    backupKeys: State['backupKeys'],
+    network: Network
+) {
     // Each tree node must have two leaves
     if (backupKeys.length == 1) backupKeys.push(backupKeys[0]);
     
     const scriptTree = await Promise.all(backupKeys.map(async (backupKey) => {
-        const xOnlyPk = (await generateXOnlyPubKey(backupKey.mnemonic)).toString('hex');
+        const xOnlyPk = (await generateXOnlyPubKey(backupKey.mnemonic, network)).toString('hex');
         return xOnlyPk;
     }));
-    const internalKey = await generateXOnlyPubKey(masterMnemonic);
+    const internalKey = await generateXOnlyPubKey(masterMnemonic, network);
 
     const outputTree = DESCRIPTORS.script_tree(
         scriptTree.map((xOnlyPk) => DESCRIPTORS.pay_to_pubkey(xOnlyPk))

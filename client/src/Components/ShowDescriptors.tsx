@@ -8,8 +8,12 @@ import { usePromise } from "../utils";
 export const ShowDescriptors: FC<StageProps> = ({ state, navigation }) => {
     const createWalletDescriptors = useCallback(() => {
         if (!state.mnemonic) return Promise.resolve(['']);
-        return createTaprootDescriptorsForBackupkeys(state.mnemonic, state.backupKeys);
-    }, [state.mnemonic, state.backupKeys]);
+        return createTaprootDescriptorsForBackupkeys(
+            state.mnemonic,
+            state.backupKeys,
+            state.network
+        );
+    }, [state.mnemonic, state.backupKeys, state.network]);
     const walletDescriptors = usePromise(createWalletDescriptors);
     
     return <Box>

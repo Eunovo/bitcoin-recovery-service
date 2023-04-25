@@ -1,5 +1,5 @@
 import BIP32Factory from 'bip32';
-import { crypto, initEccLib, Signer } from "bitcoinjs-lib";
+import { crypto, initEccLib, Network, Signer } from "bitcoinjs-lib";
 import * as ecc from 'tiny-secp256k1';
 import * as bip39 from "bip39";
 import { ECPairFactory, ECPairAPI } from 'ecpair';
@@ -12,15 +12,18 @@ export function generateMnemonic() {
     return bip39.generateMnemonic();
 }
 
-export async function generateXOnlyPubKey(mnemonic: string) {
+export async function generateKeyFrom(mnemonic: string, network: Network) {
     const seed = await bip39.mnemonicToSeed(mnemonic);
-    const rootKey = bip32.fromSeed(seed);
+    return bip32.fromSeed(seed, network);
+}
+
+export async function generateXOnlyPubKey(mnemonic: string, network: Network) {
+    const rootKey = await generateKeyFrom(mnemonic, network);
     return rootKey.publicKey.slice(1, 33);
 }
 
-export async function generateSigner(mnemonic: string) {
-    const seed = await bip39.mnemonicToSeed(mnemonic);
-    const rootKey = bip32.fromSeed(seed);
+export async function generateSigner(mnemonic: string, network: Network) {
+    const rootKey = await generateKeyFrom(mnemonic, network);
     return ECPair.fromPrivateKey(rootKey.privateKey!);
 }
 
