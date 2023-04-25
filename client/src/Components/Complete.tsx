@@ -29,8 +29,9 @@ export const Complete: FC<StageProps> = ({ state, navigation }) => {
             valueInSats: utxo.amount * BTC_TO_SATS
         }));
 
-        const psbt = createTransaction({
+        const psbt = await createTransaction({
             signer: state.signer,
+            mnemonic: state.mnemonic,
             network: state.network,
             utxos,
             recipients: [

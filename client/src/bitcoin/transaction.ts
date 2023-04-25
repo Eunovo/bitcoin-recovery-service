@@ -1,9 +1,10 @@
 import { Network,Psbt, Signer } from "bitcoinjs-lib";
-import { toXOnly } from "./keys";
+import { generateXOnlyPubKey } from "./keys";
 import { generateTaprootPayment } from "./address";
 
 export interface CreateTransactionParams {
     signer: Signer;
+    mnemonic: string;
     recipients: {
         amountInSats: number;
         address: string;
@@ -16,11 +17,11 @@ export interface CreateTransactionParams {
     network: Network;
 }
 
-export function createTransaction(params: CreateTransactionParams) {
+export async function createTransaction(params: CreateTransactionParams) {
     const psbt = new Psbt({
         network: params.network
     });
-    const internalKey = toXOnly(params.signer.publicKey);
+    const internalKey = await generateXOnlyPubKey(params.mnemonic, params.network);
     const payment = generateTaprootPayment(params.signer, params.network);
 
     params.utxos.forEach((utxo) => {
