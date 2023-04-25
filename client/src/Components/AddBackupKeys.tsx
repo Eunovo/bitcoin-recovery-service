@@ -33,6 +33,8 @@ export const AddBackupKeys: FC<StageProps> = ({ state, dispatch, navigation }) =
                 key={backupKey.mnemonic}
                 sx={{ py: 2 }}
             >
+                <Typography variant='h6' sx={{ textTransform: 'capitalize' }}>
+                        {backupKey.name}</Typography>
                 <Typography variant='h6' sx={{
                     p: 2,
                     borderRadius: 2,
