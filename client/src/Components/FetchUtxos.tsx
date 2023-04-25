@@ -3,8 +3,8 @@ import { Box, CircularProgress, Typography } from '@mui/material';
 import { StageProps } from './StageProps';
 import { fetchUtxosForAddress } from '../bitcoin/network-api';
 import { ActionKind } from '../State/Actions';
+import { BTC_TO_SATS } from '../constants';
 
-const BTC_TO_SATS = 1e8;
 type Maybe<T> = { state: 'set', value: T } | { state: 'not_set' };
 
 export const FetchUtxos: FC<StageProps> = ({ state, dispatch, navigation }) => {
