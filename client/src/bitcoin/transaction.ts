@@ -36,7 +36,7 @@ export async function createTransaction(params: CreateTransactionParams) {
     params.recipients.forEach(({ amountInSats, address }) => {
         psbt.addOutput({
             address,
-            value: amountInSats - 5000,
+            value: amountInSats - 6000,
         });
     });
 
