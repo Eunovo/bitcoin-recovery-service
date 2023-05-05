@@ -5,7 +5,7 @@ It uses TapScript to create complex outputs and generates the descriptors for th
 
 ## Running the application
 
-Running the client  
+### Running the client  
 `cd client & yarn start`
 
 ### Client Variables
@@ -15,6 +15,7 @@ Running the client
 
 ## Features
 
+- Regtest support
 - Generate wallet master key
 - Automatically gather UTXO from master key taproot address
 - Add backup keys
@@ -25,3 +26,4 @@ Running the client
 - Add timelock setting to backup keys
 - Add expiry date setting to backup keys
 - Add threshold settings for backup keys, so that it is possible to require more than one backup key
+- Testnet support
