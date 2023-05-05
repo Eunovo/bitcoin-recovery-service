@@ -8,6 +8,11 @@ It uses TapScript to create complex outputs and generates the descriptors for th
 Running the client  
 `cd client & yarn start`
 
+### Client Variables
+`REACT_APP_MASTER_MNEMONIC` Used during testing to set a master mnemonic to be used for generating a master key  
+`REACT_APP_BACKUP_KEYS` Used during testing to set backup keys. It accepts a stringified array of backup keys in the format `{ "name": "alice", "mnemonic": "..." }`  
+`REACT_APP_LOCAL_BITAPI` Url to a Local Bitapi server
+
 ## Features
 
 - Generate wallet master key

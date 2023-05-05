@@ -14,18 +14,11 @@ import { FetchUtxos } from './Components/FetchUtxos';
 const INITIAL_STATE: State = {
   stage: 'generate_mnemonic',
   network: networks.regtest,
-  mnemonic: 'unable famous street merit easily shallow energy target wild hello type electric',
+  mnemonic: process.env.REACT_APP_MASTER_MNEMONIC?.trim() ?? '',
   utxos: [],
-  backupKeys: [
-    {
-      name: 'alice',
-      mnemonic: 'apple scorpion artwork onion current exile mention remember bean wave half act'
-    },
-    {
-      name: 'bob',
-      mnemonic: 'category venue art angry feel spread theory disease lady chair evoke zero'
-    }
-  ]
+  backupKeys: process.env.REACT_APP_BACKUP_KEYS
+    ? JSON.parse(process.env.REACT_APP_BACKUP_KEYS)
+    : []
 };
 
 function App() {
