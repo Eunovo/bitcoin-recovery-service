@@ -1,7 +1,6 @@
 import { Axios, AxiosResponse } from "axios";
 import { Network } from "bitcoinjs-lib";
 import { UTXO } from "./UTXO";
-import { StringLiteralLike } from "typescript";
 
 const axios = new Axios({
     baseURL: 'http://localhost:4000/api'
