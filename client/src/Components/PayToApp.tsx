@@ -3,9 +3,8 @@ import { Box, IconButton, Typography } from "@mui/material";
 import { ContentCopy } from "@mui/icons-material";
 import { Signer } from "bitcoinjs-lib";
 import { StageProps } from "./StageProps";
-import { generateSigner, tweakSigner } from "../bitcoin/keys";
 import { usePromise, copyTextToClipboard } from "../utils";
-import { generateTaprootAddress } from "../bitcoin/address";
+import { generateSignerAndTaprootAddress } from "../bitcoin/address";
 import { ActionKind } from "../State/Actions";
 
 export const PayToApp: React.FC<StageProps> = ({ state, dispatch, navigation }) => {
@@ -13,9 +12,7 @@ export const PayToApp: React.FC<StageProps> = ({ state, dispatch, navigation }) 
         if (!state.mnemonic)
             throw new Error('Cannot generate address without mnemonic');
 
-        let signer: Signer = await generateSigner(state.mnemonic, state.network);
-        signer = tweakSigner(signer, { network: state.network });
-        const address = generateTaprootAddress(signer, state.network);
+        const { signer, address } = await generateSignerAndTaprootAddress(state.mnemonic, state.network);
         if (address) dispatch({ kind: ActionKind.set_address, payload: { address, signer } });
         return address;
     }, [state.mnemonic, state.network, dispatch]);
