@@ -5,7 +5,7 @@ import * as bip39 from "bip39";
 import { ECPairFactory, ECPairAPI } from 'ecpair';
 
 const bip32 = BIP32Factory(ecc);
-initEccLib(ecc as any);
+initEccLib(ecc);
 const ECPair: ECPairAPI = ECPairFactory(ecc);
 
 export function generateMnemonic() {
