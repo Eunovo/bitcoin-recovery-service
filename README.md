@@ -13,6 +13,9 @@ It uses TapScript to create complex outputs and generates the descriptors for th
 `REACT_APP_BACKUP_KEYS` Used during testing to set backup keys. It accepts a stringified array of backup keys in the format `{ "name": "alice", "mnemonic": "..." }`  
 `REACT_APP_LOCAL_BITAPI` Url to a Local Bitapi server
 
+## Running the tests
+`cd client & yarn test:functions`
+
 ## Features
 
 - Regtest support
