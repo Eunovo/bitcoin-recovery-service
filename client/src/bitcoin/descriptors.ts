@@ -52,7 +52,10 @@ export async function createTaprootDescriptorsForBackupkeys(
                 name: key.name,
                 value: DESCRIPTORS.taproot(
                     internalKey.toString('hex'),
-                    outputTree.replaceAll(key.xOnlyPk, key.wifPrivKey)
+                    outputTree.replace(
+                        new RegExp(key.xOnlyPk, 'g'),
+                        key.wifPrivKey
+                    )
                 )
             };
         }));
