@@ -2,7 +2,10 @@ import { FC, useCallback } from "react";
 import { Box, Typography } from "@mui/material";
 import { StageProps } from "./StageProps";
 import { TextBoxWithCopy } from "./TextBoxWithCopy";
-import { createTaprootDescriptorsForBackupkeys } from "../bitcoin/descriptors";
+import {
+    createTaprootDescriptorsForBackupkeys,
+    getChecksumForDescriptor
+} from "../bitcoin/descriptors";
 import { usePromise } from "../utils";
 
 export const ShowDescriptors: FC<StageProps> = ({ state, navigation }) => {
@@ -24,7 +27,8 @@ export const ShowDescriptors: FC<StageProps> = ({ state, navigation }) => {
                 return <Box key={descriptor.name} sx={{ py: 2 }}>
                     <Typography variant='h6' sx={{ textTransform: 'capitalize' }}>
                         {descriptor.name}</Typography>
-                    <TextBoxWithCopy content={descriptor.value} />
+                    <TextBoxWithCopy
+                        content={`${descriptor.value}#${getChecksumForDescriptor(descriptor.value)}`} />
                 </Box>
             })
         }

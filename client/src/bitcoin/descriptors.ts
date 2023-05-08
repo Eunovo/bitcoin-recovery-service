@@ -71,3 +71,7 @@ export function getAddressesFromDescriptor(descriptors: string[], network: Netwo
         return descriptor.getAddress();
     })
 }
+
+export function getChecksumForDescriptor(descriptor: string) {
+    return descriptors.checksum(descriptor);
+}
