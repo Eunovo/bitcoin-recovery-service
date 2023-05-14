@@ -1,17 +1,18 @@
-import { FC, useCallback } from "react";
-import { Box, Button, IconButton, Typography } from "@mui/material";
+import { FC, useCallback, useState } from "react";
+import { Box, Button, Dialog, DialogContent, DialogTitle, IconButton, Typography } from "@mui/material";
 import { DeleteOutline } from "@mui/icons-material";
 import { StageProps } from "./StageProps";
 import { ActionKind } from "../State/Actions";
 import { generateMnemonic } from "../bitcoin/keys";
+import { BackupKeySettings } from "./BackupKeySetting";
 
 export const AddBackupKeys: FC<StageProps> = ({ state, dispatch, navigation }) => {
-    const addNewKey = useCallback(() => {
+    const addNewKey = useCallback((settings: { name: string }) => {
         const mnemonic = generateMnemonic();
         dispatch({
             kind: ActionKind.add_backup_key,
             payload: {
-                name: 'Carol',
+                name: settings.name,
                 mnemonic
             }
         })
@@ -29,13 +30,7 @@ export const AddBackupKeys: FC<StageProps> = ({ state, dispatch, navigation }) =
     return <Box>
         <Typography variant='h3'>Add Backup keys</Typography>
         <Box sx={{ mt: 2, mb: 4, display: 'flex', alignItems: 'center' }}>
-            <Button
-                color='primary'
-                variant='contained'
-                onClick={() => addNewKey()}
-            >
-                Add New Key
-            </Button>
+            <AddBackupKey addNewKey={addNewKey} />
         </Box>
 
         {
@@ -68,4 +63,39 @@ export const AddBackupKeys: FC<StageProps> = ({ state, dispatch, navigation }) =
 
         {navigation}
     </Box>
+}
+
+
+const AddBackupKey: FC<{
+    addNewKey: (settings: { name: string }) => void
+}> = ({ addNewKey }) => {
+    const [open, setOpen] = useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    return <>
+        <Button
+            color='primary'
+            variant='contained'
+            onClick={handleClickOpen}
+        >
+            Add New Key
+        </Button>
+        <Dialog open={open} onClose={handleClose}>
+            <DialogTitle>Add Backup key</DialogTitle>
+            <DialogContent>
+                <BackupKeySettings
+                    addKey={(settings) => {
+                        addNewKey(settings);
+                        handleClose();
+                    }}
+                />
+            </DialogContent>
+        </Dialog>
+    </>
 }
