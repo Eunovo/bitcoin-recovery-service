@@ -1,5 +1,6 @@
 import { FC, useCallback } from "react";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, IconButton, Typography } from "@mui/material";
+import { DeleteOutline } from "@mui/icons-material";
 import { StageProps } from "./StageProps";
 import { ActionKind } from "../State/Actions";
 import { generateMnemonic } from "../bitcoin/keys";
@@ -12,6 +13,15 @@ export const AddBackupKeys: FC<StageProps> = ({ state, dispatch, navigation }) =
             payload: {
                 name: 'Carol',
                 mnemonic
+            }
+        })
+    }, [dispatch]);
+    const removeKeyByMnemonic = useCallback((mnemonic: string) => {
+        dispatch({
+            kind: ActionKind.remove_backup_key,
+            payload: {
+                by: 'mnemonic',
+                value: mnemonic
             }
         })
     }, [dispatch]);
@@ -33,8 +43,18 @@ export const AddBackupKeys: FC<StageProps> = ({ state, dispatch, navigation }) =
                 key={backupKey.mnemonic}
                 sx={{ py: 2 }}
             >
-                <Typography variant='h6' sx={{ textTransform: 'capitalize' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Typography variant='h6' sx={{ textTransform: 'capitalize', mr: 'auto' }}>
                         {backupKey.name}</Typography>
+
+                    <IconButton
+                        color='error'
+                        onClick={() => removeKeyByMnemonic(backupKey.mnemonic)}
+                    >
+                        <DeleteOutline />
+                    </IconButton>
+                </Box>
+
                 <Typography variant='h6' sx={{
                     p: 2,
                     borderRadius: 2,
