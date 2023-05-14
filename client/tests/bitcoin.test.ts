@@ -1,5 +1,9 @@
 import { generateSignerAndTaprootAddress } from '../src/bitcoin/address';
-import { createTaprootDescriptorsForBackupkeys, getChecksumForDescriptor } from '../src/bitcoin/descriptors';
+import {
+    createTaprootDescriptorsForBackupkeys,
+    getChecksumForDescriptor,
+    createScriptTreeFromList
+} from '../src/bitcoin/descriptors';
 import { fixtures } from './fixtures';
 
 test('generates taproot address for master mnemonic', async () => {
@@ -14,6 +18,11 @@ test('generates regtest wallet descriptors', async () => {
         fixtures.master_mnemonic, fixtures.backup_keys, fixtures.regtest
     );
     expect(descriptors).toStrictEqual(fixtures.regtest_descriptors);
+});
+
+test('generates regtest wallet descriptors with odd number of backup keys', async () => {
+    const root = createScriptTreeFromList(['a', 'b', 'c', 'd', 'e']);
+    expect(root).toBe("{{c,d},{e,{a,b}}}");
 });
 
 test('generates descriptor checksum', async () => {
