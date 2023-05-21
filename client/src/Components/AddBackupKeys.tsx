@@ -5,15 +5,17 @@ import { StageProps } from "./StageProps";
 import { ActionKind } from "../State/Actions";
 import { generateMnemonic } from "../bitcoin/keys";
 import { BackupKeySettings } from "./BackupKeySetting";
+import { State } from "../State/State";
 
 export const AddBackupKeys: FC<StageProps> = ({ state, dispatch, navigation }) => {
-    const addNewKey = useCallback((settings: { name: string }) => {
+    const addNewKey = useCallback((settings: Omit<State['backupKeys'][number], 'mnemonic'>) => {
         const mnemonic = generateMnemonic();
         dispatch({
             kind: ActionKind.add_backup_key,
             payload: {
+                mnemonic,
                 name: settings.name,
-                mnemonic
+                validFrom: settings.validFrom
             }
         })
     }, [dispatch]);
