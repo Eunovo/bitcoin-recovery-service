@@ -29,3 +29,17 @@ test('generates descriptor checksum', async () => {
     const checksum = getChecksumForDescriptor(fixtures.descriptor);
     expect(checksum).toBe(fixtures.checksum);
 });
+
+test('generate descriptor for timelocked key', async () => {
+    const descriptors = await createTaprootDescriptorsForBackupkeys(
+        fixtures.mnemonics[0],
+        [{
+            name: 'test',
+            mnemonic: fixtures.mnemonics[1],
+            validFrom: new Date(Date.now() + fixtures.timelock.period_ms)
+        }],
+        fixtures.regtest
+    );
+    expect(descriptors[0].value)
+        .toStrictEqual(`tr(${fixtures.pubkeys[0]},and_b(pk(${fixtures.pubkeys[1]}),${fixtures.timelock.fragment}))`);
+});

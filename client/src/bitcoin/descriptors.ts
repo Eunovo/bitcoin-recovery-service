@@ -9,6 +9,8 @@ const { Descriptor } = descriptors.DescriptorsFactory(tinysecp);
 
 export const DESCRIPTORS = {
     pay_to_pubkey: (pubkey: string) => `pk(${pubkey})`,
+    older: (n: number) => `older(${n})`,
+    and_b: (a: string, b: string) => `and_b(${a},${b})`,
     script_tree: (scripts: string[]) => {
         assert(scripts.length === 2, "Two script children must be supplied");
         return `{${scripts.join(',')}}`;
@@ -26,7 +28,16 @@ export async function createTaprootDescriptorsForBackupkeys(
     const keys = await Promise.all(backupKeys.map(async (backupKey) => {
         const key = await generateKeyFrom(backupKey.mnemonic, network);
         const xOnlyPk = toXOnly(key.publicKey).toString('hex');
-        return { name: backupKey.name, wifPrivKey: key.toWIF(), xOnlyPk };
+        let timelockNBlocks = backupKey.validFrom
+            ? millisecondsToBlockCount(backupKey.validFrom.getTime() - Date.now())
+            : undefined;
+
+        return {
+            name: backupKey.name,
+            wifPrivKey: key.toWIF(),
+            xOnlyPk,
+            timelockNBlocks
+        };
     }));
     const internalKey = await generateXOnlyPubKey(masterMnemonic, network);
 
@@ -39,11 +50,16 @@ export async function createTaprootDescriptorsForBackupkeys(
         ]
     }
 
+    function createScript(key: typeof keys[number]) {
+        const { xOnlyPk, timelockNBlocks } = key;
+        return timelockNBlocks
+            ? DESCRIPTORS.and_b(DESCRIPTORS.pay_to_pubkey(xOnlyPk), DESCRIPTORS.older(timelockNBlocks))
+            : DESCRIPTORS.pay_to_pubkey(xOnlyPk);
+    }
+
     const outputTree = keys.length > 1
-        ? createScriptTreeFromList(
-            keys.map(({ xOnlyPk }) => DESCRIPTORS.pay_to_pubkey(xOnlyPk))
-        )
-        : DESCRIPTORS.pay_to_pubkey(keys[0].xOnlyPk);
+        ? createScriptTreeFromList(keys.map(createScript))
+        : createScript(keys[0]);
 
     return [
         {
@@ -93,4 +109,11 @@ export function createScriptTreeFromList(scripts: string[]) {
     }
     assert(scripts.length === 1, "Expected only root to be left in list");
     return scripts[0];
+}
+
+function millisecondsToBlockCount(ms: number) {
+    const BLOCK_RATE_PER_MIN = 0.1;
+    const minutes = ms / (60 * 1000);
+    
+    return Math.round(minutes * BLOCK_RATE_PER_MIN);
 }
