@@ -22,13 +22,14 @@ It uses TapScript to create complex outputs and generates the descriptors for th
 - Generate wallet master key
 - Automatically gather UTXO from master key taproot address
 - Add backup keys
+- Set timelocks on backup keys
 - Generate watch-only wallet descriptor(with checksum)
 - Generate signing wallets descriptors(with checksum) for each backup key
+
 
 ## Roadmap
 
 - Generate signing wallet descriptor for master key
-- Add timelock setting to backup keys
 - Add expiry date setting to backup keys
 - Add threshold settings for backup keys, so that it is possible to require more than one backup key
 - Testnet support
