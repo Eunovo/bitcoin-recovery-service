@@ -39,7 +39,10 @@ export async function createTaprootDescriptorsForBackupkeys(
             timelockNBlocks
         };
     }));
-    const internalKey = await generateXOnlyPubKey(masterMnemonic, network);
+
+    const masterKey = await generateKeyFrom(masterMnemonic, network);
+    const masterWifPrivKey = masterKey.toWIF();
+    const internalKey = toXOnly(masterKey.publicKey);
 
     if (keys.length == 0) {
         return [
@@ -62,6 +65,10 @@ export async function createTaprootDescriptorsForBackupkeys(
         : createScript(keys[0]);
 
     return [
+        {
+            name: 'Master Signing Wallet',
+            value: DESCRIPTORS.taproot(masterWifPrivKey, outputTree)
+        },
         {
             name: 'watch-only',
             value: DESCRIPTORS.taproot(internalKey.toString('hex'), outputTree)

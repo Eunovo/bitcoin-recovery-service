@@ -11,7 +11,7 @@ const pubkeys = [
     "8386eab71009d1a8d6f04dc39ded027303922cd186a3a2fb9fad19501951c1cc"
 ];
 const privkeys = [
-    "",
+    "cRwfTtFTJXazj7Xr57SELMEF537X1ytSULgnsopvZgV3SmbsshYQ",
     "cMntQjDbQ7gwVEtB869fRAFCPw6pxS8XbWnJGvmxkG5AASPNJDZQ",
     "cUMNXaeqtJECFLZ2czc24qZns5GUPSN4Nw25TfC6EQKGqr9LDx22"
 ];
@@ -28,6 +28,7 @@ export const fixtures = {
         { "name": "bob", "mnemonic": mnemonics[2] }
     ],
     regtest_descriptors: [
+        {"name":"Master Signing Wallet","value":`tr(${privkeys[0]},{pk(${pubkeys[1]}),pk(${pubkeys[2]})})`},
         {"name":"watch-only","value":`tr(${pubkeys[0]},{pk(${pubkeys[1]}),pk(${pubkeys[2]})})`},
         {"name":"alice","value":`tr(${pubkeys[0]},{pk(${privkeys[1]}),pk(${pubkeys[2]})})`},
         {"name":"bob","value":`tr(${pubkeys[0]},{pk(${pubkeys[1]}),pk(${privkeys[2]})})`}

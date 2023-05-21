@@ -41,5 +41,5 @@ test('generate descriptor for timelocked key', async () => {
         fixtures.regtest
     );
     expect(descriptors[0].value)
-        .toStrictEqual(`tr(${fixtures.pubkeys[0]},and_b(pk(${fixtures.pubkeys[1]}),${fixtures.timelock.fragment}))`);
+        .toStrictEqual(`tr(${fixtures.privkeys[0]},and_b(pk(${fixtures.pubkeys[1]}),${fixtures.timelock.fragment}))`);
 });
