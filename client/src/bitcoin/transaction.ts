@@ -1,6 +1,8 @@
 import { Network,Psbt, Signer } from "bitcoinjs-lib";
 import { generateXOnlyPubKey } from "./keys";
 import { generateTaprootPayment } from "./address";
+import { FEE_RATE } from "../constants";
+import assert from "assert";
 
 export interface CreateTransactionParams {
     signer: Signer;
@@ -18,6 +20,7 @@ export interface CreateTransactionParams {
 }
 
 export async function createTransaction(params: CreateTransactionParams) {
+    assert(params.recipients.length == 1, 'Only supports one output for now');
     const psbt = new Psbt({
         network: params.network
     });
@@ -33,10 +36,12 @@ export async function createTransaction(params: CreateTransactionParams) {
         });
     });
 
+    const fee = FEE_RATE * psbt.toBuffer().byteLength;
+
     params.recipients.forEach(({ amountInSats, address }) => {
         psbt.addOutput({
             address,
-            value: amountInSats - 6000,
+            value: amountInSats - fee,
         });
     });
 
