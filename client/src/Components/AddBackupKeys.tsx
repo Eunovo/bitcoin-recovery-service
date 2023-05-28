@@ -52,6 +52,14 @@ export const AddBackupKeys: FC<StageProps> = ({ state, dispatch, navigation }) =
                     </IconButton>
                 </Box>
 
+                <Typography variant='caption'>
+                    {
+                        backupKey.validFrom
+                            ? `Valid from ${backupKey.validFrom}`
+                            : 'Valid immediately'
+                    }
+                </Typography>
+
                 <Typography variant='h6' sx={{
                     p: 2,
                     borderRadius: 2,
@@ -90,7 +98,7 @@ const AddBackupKey: FC<{
         </Button>
         <Dialog open={open} onClose={handleClose}>
             <DialogTitle>Add Backup key</DialogTitle>
-            <DialogContent>
+            <DialogContent sx={{ width: '30rem' }}>
                 <BackupKeySettings
                     addKey={(settings) => {
                         addNewKey(settings);

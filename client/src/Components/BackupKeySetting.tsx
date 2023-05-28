@@ -19,21 +19,30 @@ export const BackupKeySettings: FC<BackupKeySettingsProps> = ({ addKey }) => {
     });
 
     return <>
-        <Box component={'form'} onSubmit={(e) => {
-            e.preventDefault();
-            addKey({
-                name: values.name,
-                validFrom: values.validFrom
-                    ? new Date(values.validFrom)
-                    : undefined
-            });
-        }}>
+        <Box
+            component={'form'}
+            onSubmit={(e) => {
+                e.preventDefault();
+                addKey({
+                    name: values.name,
+                    validFrom: values.validFrom
+                        ? new Date(values.validFrom)
+                        : undefined
+                });
+            }}
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                minWidth: '100%',
+                rowGap: 4,
+                py: 2
+            }}
+        >
             <TextField
                 fullWidth
                 label='Key Name'
                 value={values.name}
                 onChange={(e) => setValues(v => ({ ...v, name: e.target.value }))}
-                margin="normal"
                 variant='outlined'
                 required
             />
@@ -50,7 +59,7 @@ export const BackupKeySettings: FC<BackupKeySettingsProps> = ({ addKey }) => {
             <Button
                 type='submit'
                 variant="contained"
-                sx={{ mt: 4 }}
+                sx={{ width: '10rem' }}
             >
                 Add key
             </Button>
