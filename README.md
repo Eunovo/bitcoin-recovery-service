@@ -3,7 +3,7 @@
 This application allows users to generate wallet descriptors for complex spending conditions. It allows the user to create alternative spend-paths that can be used in the event of a lost key. It comes with an easy-to-use Web UI built in React.  
 It uses TapScript to create complex outputs and generates the descriptors for this output.
 
-This project uses tapminiscript features which are still in development and are not supported by the bitcoind release.
+This project uses tapminiscript features which are still in development and are not supported by the bitcoind release. See [the MiniTapscript PR](https://github.com/bitcoin/bitcoin/pull/27255)
 
 ## Running the application
 
