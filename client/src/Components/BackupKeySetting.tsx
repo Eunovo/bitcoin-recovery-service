@@ -2,6 +2,7 @@ import { FC, useState } from "react";
 import { Box, Button, TextField } from "@mui/material";
 import { State } from "../State/State";
 import dayjs, { Dayjs } from 'dayjs';
+import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -13,9 +14,12 @@ interface BackupKeySettingsProps {
 }
 
 export const BackupKeySettings: FC<BackupKeySettingsProps> = ({ addKey }) => {
-    const [values, setValues] = useState({
+    const [values, setValues] = useState<{
+        name: string,
+        validFrom: string | null
+    }>({
         name: '',
-        validFrom: '',
+        validFrom: null,
     });
 
     return <>
@@ -48,12 +52,14 @@ export const BackupKeySettings: FC<BackupKeySettingsProps> = ({ addKey }) => {
             />
 
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                    label="Valid From"
-                    value={values.validFrom}
-                    onChange={(newValue) => newValue && setValues((s) => ({ ...s, validFrom: newValue }))}
-                    minDate={new Date().toISOString()}
-                />
+                <DemoContainer components={['DateCalendar']}>
+                    <DemoItem label="Valid from">
+                        <DatePicker
+                            value={values.validFrom}
+                            onChange={(newValue) => newValue && setValues((s) => ({ ...s, validFrom: newValue }))}
+                        />
+                    </DemoItem>
+                </DemoContainer>
             </LocalizationProvider>
 
             <Button
