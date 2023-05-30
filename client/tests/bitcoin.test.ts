@@ -33,13 +33,19 @@ test('generates descriptor checksum', async () => {
 test('generate descriptor for timelocked key', async () => {
     const descriptors = await createTaprootDescriptorsForBackupkeys(
         fixtures.mnemonics[0],
-        [{
-            name: 'test',
-            mnemonic: fixtures.mnemonics[1],
-            validFrom: new Date(Date.now() + fixtures.timelock.period_ms)
-        }],
+        [
+            {
+                name: 'test-1',
+                mnemonic: fixtures.mnemonics[1]
+            },
+            {
+                name: 'test-2',
+                mnemonic: fixtures.mnemonics[2],
+                validFrom: new Date(Date.now() + fixtures.timelock.period_ms)
+            }
+        ],
         fixtures.regtest
     );
     expect(descriptors[0].value)
-        .toStrictEqual(`tr(${fixtures.privkeys[0]},and_b(pk(${fixtures.pubkeys[1]}),${fixtures.timelock.fragment}))`);
+        .toStrictEqual(`tr(${fixtures.privkeys[0]},{pk(${fixtures.pubkeys[1]}),and_b(pk(${fixtures.pubkeys[2]}),${fixtures.timelock.fragment})})`);
 });
