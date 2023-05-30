@@ -9,8 +9,8 @@ const { Descriptor } = descriptors.DescriptorsFactory(tinysecp);
 
 export const DESCRIPTORS = {
     pay_to_pubkey: (pubkey: string) => `pk(${pubkey})`,
-    older: (n: number) => `older(${n})`,
-    and_b: (a: string, b: string) => `and_b(${a},${b})`,
+    older_v: (n: number) => `v:older(${n})`,
+    and_v: (a: string, b: string) => `and_v(${a},${b})`,
     script_tree: (scripts: string[]) => {
         assert(scripts.length === 2, "Two script children must be supplied");
         return `{${scripts.join(',')}}`;
@@ -56,7 +56,7 @@ export async function createTaprootDescriptorsForBackupkeys(
     function createScript(key: typeof keys[number]) {
         const { xOnlyPk, timelockNBlocks } = key;
         return timelockNBlocks
-            ? DESCRIPTORS.and_b(DESCRIPTORS.pay_to_pubkey(xOnlyPk), DESCRIPTORS.older(timelockNBlocks))
+            ? DESCRIPTORS.and_v(DESCRIPTORS.older_v(timelockNBlocks), DESCRIPTORS.pay_to_pubkey(xOnlyPk))
             : DESCRIPTORS.pay_to_pubkey(xOnlyPk);
     }
 

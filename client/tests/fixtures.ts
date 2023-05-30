@@ -37,6 +37,6 @@ export const fixtures = {
     checksum: 'ggzu4y5v',
     timelock: {
         period_ms: 90 * 24 * 3600 * 1000, // 90 days in milliseconds
-        fragment: 'older(12960)'
+        fragment: 'v:older(12960)'
     }
 }
