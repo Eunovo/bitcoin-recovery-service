@@ -30,6 +30,12 @@ export function reducer(state: State, action: Action) {
                     .filter((backupKey) => backupKey[by] !== value)
             };
 
+        case ActionKind.set_tx:
+            return {
+                ...state,
+                tx: action.payload
+            };
+
         default:
             return state;
     }

@@ -7,11 +7,13 @@ import { BTC_TO_SATS } from "../constants";
 import { createTaprootDescriptorsForBackupkeys } from "../bitcoin/descriptors";
 import { usePromise } from "../utils";
 import { TextBoxWithCopy } from "./TextBoxWithCopy";
+import { ActionKind } from "../State/Actions";
 
-export const Complete: FC<StageProps> = ({ state, navigation }) => {
+export const Complete: FC<StageProps> = ({ state, dispatch, navigation }) => {
     const broadcastTx = useCallback(async () => {
         if (!state.signer) return;
         if (!state.mnemonic) return;
+        if (state.tx) return state.tx;
 
         const descriptors = await createTaprootDescriptorsForBackupkeys(
             state.mnemonic,
@@ -43,8 +45,13 @@ export const Complete: FC<StageProps> = ({ state, navigation }) => {
                 }
             ]
         });
-        return broadcast(psbt.extractTransaction().toHex())
-    }, [state.mnemonic, state.signer, state.backupKeys, state.network, state.utxos]);
+        const tx = await broadcast(psbt.extractTransaction().toHex());
+        dispatch({
+            kind: ActionKind.set_tx,
+            payload: tx
+        });
+        return tx;
+    }, [state.mnemonic, state.signer, state.backupKeys, state.network, state.utxos, dispatch]);
     const tx = usePromise(broadcastTx);
 
     return <Box>

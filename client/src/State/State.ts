@@ -13,4 +13,5 @@ export interface State {
         mnemonic: string;
         validFrom?: Date;
     }[];
+    tx?: { txid: string };
 }

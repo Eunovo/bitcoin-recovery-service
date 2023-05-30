@@ -7,7 +7,8 @@ export enum ActionKind {
     set_address = 'set_address',
     set_utxos = 'set_utxos',
     add_backup_key = 'add_backup_key',
-    remove_backup_key = 'remove_backup_key'
+    remove_backup_key = 'remove_backup_key',
+    set_tx = 'set_tx'
 }
 
 export type Action = 
@@ -41,3 +42,7 @@ export type Action =
         value: string
     }
 }
+| {
+    kind: ActionKind.set_tx,
+    payload: State['tx']
+};
